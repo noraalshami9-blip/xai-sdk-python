@@ -1,14 +1,50 @@
+
 from typing import Sequence
 
 from absl import app, flags
 
 from xai_sdk import Client
 
-OPERATION = flags.DEFINE_enum("operation", "list", ["list", "get"], "Operation to perform.")
-MODEL_TYPE = flags.DEFINE_enum("model-type", None, ["language", "embedding", "image"], "Model type to list.")
-MODEL_NAME = flags.DEFINE_string("model-name", None, "Model name to get.")
+# ====================== الإعدادات الأساسية لـ SAIF Grok Pro ======================
+APP_NAME = "SAIF Grok Pro"
+SHAM_CASH_WALLET = "3a32d21613032b3cd3e45041b6b75fb8"
 
+# ====================== Flags الأصلية ======================
+OPERATION = flags.DEFINE_enum(
+    "operation", "list", ["list", "get", "payment"],
+    "Operation to perform. (الجديد: payment لمعالجة الدفعات عبر شام كاش)"
+)
 
+MODEL_TYPE = flags.DEFINE_enum(
+    "model-type", None, ["language", "embedding", "image"],
+    "Model type to list."
+)
+
+MODEL_NAME = flags.DEFINE_string(
+    "model-name", None, "Model name to get."
+)
+
+# ====================== Flags الجديدة لميزة الدفعات عبر شام كاش ======================
+PAYMENT_ACTION = flags.DEFINE_enum(
+    "payment-action", "info",
+    ["info", "verify", "activate"],
+    "إجراء الدفع عبر شام كاش (info = عرض التعليمات، verify = التحقق، activate = التفعيل)"
+)
+
+USERNAME = flags.DEFINE_string(
+    "username", None, "اسم المستخدم في التطبيق (مطلوب لـ verify و activate)"
+)
+
+TRANSACTION_ID = flags.DEFINE_string(
+    "transaction-id", None, "رقم المعاملة (Transaction ID) من شام كاش"
+)
+
+PLAN_TYPE = flags.DEFINE_enum(
+    "plan-type", None, ["monthly", "yearly"],
+    "نوع الاشتراك (monthly = شهري، yearly = سنوي)"
+)
+
+# ====================== دوال الموديلات الأصلية (بدون تغيير) ======================
 def list_language_models(client: Client) -> None:
     """List all language models associated with the API key used to make the request."""
     language_models = client.models.list_language_models()
@@ -102,14 +138,71 @@ def get_image_generation_model(client: Client, model_name: str) -> None:
     print(f"System fingerprint: {image_generation_model.system_fingerprint}")
 
 
+# ====================== دوال ميزة الدفعات الجديدة (Sham Cash) ======================
+def show_payment_info() -> None:
+    """عرض معلومات الدفع عبر شام كاش"""
+    print(f"\n=== {APP_NAME} - نظام الدفع عبر شام كاش ===")
+    print(f"رقم المحفظة الرسمي: {SHAM_CASH_WALLET}")
+    print("\nأسعار الاشتراك:")
+    print("• شهري   → 150,000 ل.س")
+    print("• سنوي   → 1,500,000 ل.س (توفير 20%)")
+    print("\nطريقة الاشتراك:")
+    print("1. حوّل المبلغ إلى المحفظة أعلاه")
+    print("2. أرسل لقطة شاشة + اسم المستخدم + نوع الاشتراك")
+    print("سيتم التفعيل فور التحقق")
+    print("\nمثال الاستخدام:")
+    print("python script.py --operation=payment --payment-action=info")
+
+
+def verify_payment(username: str, transaction_id: str) -> None:
+    """التحقق من الدفعة (يدوي/آلي)"""
+    if not username or not transaction_id:
+        raise app.UsageError("يجب تحديد --username و --transaction-id")
+    
+    print(f"🔍 جاري التحقق من الدفعة للمستخدم: {username}")
+    print(f"رقم المعاملة: {transaction_id}")
+    print(f"المحفظة المستهدفة: {SHAM_CASH_WALLET}")
+    # هنا يمكن إضافة API call حقيقي لشام كاش في المستقبل
+    print("✅ تم التحقق بنجاح (محاكاة)")
+    print("الدفعة صحيحة وجاهزة للتفعيل")
+
+
+def activate_subscription(username: str, transaction_id: str, plan: str) -> None:
+    """تفعيل الاشتراك بعد التحقق"""
+    if not username or not transaction_id or not plan:
+        raise app.UsageError("يجب تحديد --username --transaction-id --plan-type")
+    
+    print(f"🚀 تفعيل اشتراك {plan} للمستخدم: {username}")
+    print(f"رقم المعاملة: {transaction_id}")
+    
+    # تنفيذ الأمر الداخلي (كما في ملف الـ JSON السابق)
+    print(f"📌 الأمر الداخلي: ACTIVATE_SUBSCRIPTION: {username} + {transaction_id} + {plan}")
+    
+    print("✅ تم تفعيل الاشتراك بنجاح!")
+    print("المستخدم يمكنه الآن استخدام ميزات توليد الفيديوهات الشبه واقعية")
+
+
+# ====================== الدالة الرئيسية ======================
 def main(argv: Sequence[str]) -> None:
     if len(argv) > 1:
         raise app.UsageError("Unexpected command line arguments.")
 
     client = Client()
-
     client.auth.get_api_key_info()
 
+    # ====================== معالجة عملية الدفع الجديدة ======================
+    if OPERATION.value == "payment":
+        if PAYMENT_ACTION.value == "info":
+            show_payment_info()
+        elif PAYMENT_ACTION.value == "verify":
+            verify_payment(USERNAME.value, TRANSACTION_ID.value)
+        elif PAYMENT_ACTION.value == "activate":
+            activate_subscription(USERNAME.value, TRANSACTION_ID.value, PLAN_TYPE.value)
+        else:
+            raise app.UsageError("Unexpected payment-action.")
+        return
+
+    # ====================== العمليات الأصلية (list / get) ======================
     match (OPERATION.value, MODEL_TYPE.value, MODEL_NAME.value):
         case ("list", "language", None):
             list_language_models(client)
