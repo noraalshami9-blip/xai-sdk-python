@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAIFANA | الابتكار الرقمي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
+    
+    body { font-family: 'Cairo', sans-serif; }
+    
+    .hero-bg {
+      background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920') center/cover no-repeat;
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-25px); }
+    }
+
+    .service-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .service-card:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+    }
+
+    .animated-text {
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 20px #00ffcc; }
+      to { text-shadow: 0 0 40px #00ffcc; }
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+
+  <!-- Navbar -->
+  <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-lg z-50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+        SAIFANA
+      </h1>
+      <div class="flex gap-8 text-lg">
+        <a href="#" class="hover:text-cyan-400 transition">الرئيسية</a>
+        <a href="#" class="hover:text-cyan-400 transition">خدماتنا</a>
+        <a href="#" class="hover:text-cyan-400 transition">أعمالنا</a>
+        <a href="#" class="hover:text-cyan-400 transition">عن الشركة</a>
+        <a href="#" class="hover:text-cyan-400 transition">اتصل بنا</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-bg min-h-screen flex items-center">
+    <div class="max-w-7xl mx-auto px-6 pt-32">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-6xl font-bold leading-tight mb-6">
+            نصنع <span class="text-cyan-400 animated-text">المستقبل الرقمي</span>
+          </h2>
+          <p class="text-xl text-gray-300 mb-10">
+            شركة سعيفانا الرقمية - نقدم حلولاً تقنية متكاملة، تصميم مواقع، تطبيقات، وتسويق رقمي بأعلى معايير الجودة العالمية.
+          </p>
+          <button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" 
+                  class="bg-gradient-to-r from-cyan-500 to-purple-600 px-10 py-4 rounded-2xl text-xl font-semibold hover:scale-105 transition transform">
+            ابدأ مشروعك الآن
+          </button>
+        </div>
+
+        <!-- صورة متحركة -->
+        <div class="relative flex justify-center">
+          <img id="hero-image" 
+               src="https://images.unsplash.com/photo-1516321310764-9f1c1c4c0b0e?w=800" 
+               alt="SAIFANA Digital"
+               class="w-full max-w-lg floating rounded-3xl shadow-2xl border border-cyan-400/30">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="py-24 bg-gradient-to-b from-black to-zinc-950">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-5xl font-bold text-center mb-16">خدماتنا الرقمية</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="service-card bg-zinc-900 p-8 rounded-3xl border border-white/10">
+          <i class="fas fa-globe text-5xl text-cyan-400 mb-6"></i>
+          <h3 class="text-2xl font-bold mb-4">تصميم وتطوير المواقع</h3>
+          <p class="text-gray-400">مواقع احترافية سريعة ومتجاوبة باستخدام أحدث التقنيات.</p>
+        </div>
+        
+        <div class="service-card bg-zinc-900 p-8 rounded-3xl border border-white/10">
+          <i class="fas fa-mobile-alt text-5xl text-purple-400 mb-6"></i>
+          <h3 class="text-2xl font-bold mb-4">تطوير التطبيقات</h3>
+          <p class="text-gray-400">تطبيقات iOS و Android وتطبيقات الويب التقدمية.</p>
+        </div>
+        
+        <div class="service-card bg-zinc-900 p-8 rounded-3xl border border-white/10">
+          <i class="fas fa-chart-line text-5xl text-emerald-400 mb-6"></i>
+          <h3 class="text-2xl font-bold mb-4">التسويق الرقمي</h3>
+          <p class="text-gray-400">إدارة وسائل التواصل، إعلانات مدفوعة، وتحسين محركات البحث.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black border-t border-white/10 py-12">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <p class="text-2xl font-bold text-cyan-400">SAIFANA</p>
+      <p class="mt-3 text-gray-400">© 2026 - جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+
+  <script>
+    // تأثير إضافي على الصورة عند التمرير
+    window.addEventListener('scroll', () => {
+      const img = document.getElementById('hero-image');
+      const scrollY = window.scrollY;
+      img.style.transform = `translateY(${scrollY * 0.1}px)`;
+    });
+  </script>
+</body>
+    </html>
